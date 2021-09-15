@@ -4,6 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const fetch = require("node-fetch");
 const cors = require("cors");
+var FormData = require("form-data");
 const mockAPIResponse = require("./mockAPI.js");
 
 // Set PORT Number
@@ -23,28 +24,53 @@ app.use(express.static("dist"));
 console.log(__dirname);
 
 projectData = {};
+const baseURL = "https://api.meaningcloud.com/sentiment-2.1";
+const APIkey = process.env.meaningCloudAPI;
+console.log(`Your API Key is ${APIkey}`);
 
 app.get("/", function (req, res) {
-	// res.sendFile('dist/index.html')
-	res.sendFile(path.resolve("src/client/views/index.html"));
+	res.sendFile("dist/index.html");
+	// res.sendFile(path.resolve("src/client/views/index.html"));
 });
-// a route that handling post request for new URL that coming from the frontend
-/* TODO:
-    1. GET the url from the request body
-    2. Build the URL it should be something like `${BASE_API_URL}?key=${MEAN_CLOUD_API_KEY}&url=${req.body.url}&lang=en`
-    3. Fetch Data from API
-    4. Send it to the client
-    5. REMOVE THIS TODO AFTER DOING IT 😎😎
-    server sends only specified data to the client with below codes
-     const sample = {
-       text: '',
-       score_tag : '',
-       agreement : '',
-       subjectivity : '',
-       confidence : '',
-       irony : ''
-     }
-*/
+
+app.post("/review", async function (req, res) {
+	let userInput = req.body.url;
+	console.log(`URL: ${userInput}`);
+
+	const formData = new FormData();
+	formData.append("key", APIkey);
+	formData.append("txt", userInput);
+	formData.append("lang", "en");
+
+	const requestOptions = {
+		method: "POST",
+		body: formData,
+		redirect: "follow",
+	};
+
+	const response = await fetch(
+		"https://api.meaningcloud.com/sentiment-2.1",
+		requestOptions
+	)
+		.then((response) => ({
+			status: response.status,
+			body: response.json(),
+		}))
+		.then(({ status, body }) => {
+			console.log(status, body);
+
+			projectData.text = body.sentence_list[0].text;
+			projectData.score_tag = body.score_tag;
+			projectData.agreement = body.agreement;
+			projectData.subjectivity = body.subjectivity;
+			projectData.confidence = body.confidence;
+			projectData.irony = body.irony;
+
+			res.send(projectData);
+			console.log(projectData);
+		})
+		.catch((error) => console.log("error", error));
+});
 
 app.get("/test", function (req, res) {
 	res.send(mockAPIResponse);
