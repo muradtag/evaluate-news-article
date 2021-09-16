@@ -1,0 +1,15 @@
+header {
+	display: flex;
+	justify-content: center;
+	padding: 10px 40px;
+	background-color: #f2f2f2;
+
+	.title {
+		font-size: xxx-large;
+		position: relative;
+
+		span {
+			font-family: "Great Vibes", cursive;
+		}
+	}
+}

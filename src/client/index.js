@@ -2,6 +2,7 @@ import { checkURL } from "./js/checkURL";
 import { handleSubmit } from "./js/formHandler";
 
 // TODO: include your scss file here
+import "./styles/style.scss";
 
 window.addEventListener("DOMContentLoaded", () => {
 	console.log("DOM fully loaded and parsed");

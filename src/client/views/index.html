@@ -3,9 +3,17 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>Sentiment Analyzer</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat&display=swap"
+			rel="stylesheet"
+		/>
 	</head>
 
 	<body>
+		<header>
+			<h1 class="title"><span>Sentiment</span> Analyzer</h1>
+		</header>
+
 		<main>
 			<div class="container">
 				<p>Enter a URL of an article / a blog to discover its sentiment.</p>
@@ -16,7 +24,6 @@
 							id="article-url"
 							type="text"
 							name="input"
-							value=""
 							placeholder="Enter Article URL here"
 						/>
 						<button type="submit" class="btn-submit" id="btn-submit">
@@ -26,7 +33,7 @@
 				</section>
 
 				<section>
-					<strong>Form Results:</strong>
+					<strong>Form Results</strong>
 					<div id="agreement"></div>
 					<div id="subjectivity"></div>
 					<div id="confidence"></div>
@@ -35,6 +42,11 @@
 				</section>
 			</div>
 		</main>
+
+		<footer class="footer">
+			<div class="copyright">Murad Tag &copy; - 2021</div>
+		</footer>
+
 		<script>
 			// Check that service workers are supported
 			if ("serviceWorker" in navigator) {
