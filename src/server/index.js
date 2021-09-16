@@ -7,18 +7,13 @@ const cors = require("cors");
 var FormData = require("form-data");
 const mockAPIResponse = require("./mockAPI.js");
 
-// Set PORT Number
 const PORT = 8081;
-// Create an instance for the server
+
 const app = express();
-// Configure the environment variables
 dotenv.config();
-// Configure cors to avoid cors-origin issue
 app.use(cors());
-//Configure express to use body-parser as middle-ware.
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-// Configure express static directory.
 app.use(express.static("dist"));
 
 console.log(__dirname);
@@ -48,10 +43,7 @@ app.post("/review", async function (req, res) {
 		redirect: "follow",
 	};
 
-	const response = await fetch(
-		"https://api.meaningcloud.com/sentiment-2.1",
-		requestOptions
-	)
+	const response = fetch(baseURL, requestOptions)
 		.then((response) => ({
 			status: response.status,
 			body: response.json(),
@@ -76,10 +68,10 @@ app.get("/test", function (req, res) {
 	res.send(mockAPIResponse);
 });
 
-// designates what port the app will listen to for incoming requests
 app.listen(PORT, (error) => {
 	if (error) throw new Error(error);
 	console.log(`Server listening on port ${PORT}!`);
 });
 
-// TODO: export app to use it in the unit testing
+// export app to use it in the unit testing
+module.exports = app;
