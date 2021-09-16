@@ -3,7 +3,7 @@ export default function handleSubmit(e) {
 
 	let inputURL = document.getElementById("article-url").value;
 
-	if (ClientRect.checkURL(inputURL)) {
+	if (Client.checkURL(inputURL)) {
 		console.log("::: Submission Successful :::");
 
 		postData("http://localhost:8081/review", { url: inputURL })
