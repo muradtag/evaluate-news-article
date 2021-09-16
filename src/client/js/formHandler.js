@@ -1,16 +1,18 @@
-export default function handleSubmit(e) {
-	e.preventDefault();
+import { checkURL } from "./checkURL";
 
+export async function handleSubmit() {
 	let inputURL = document.getElementById("article-url").value;
 
-	if (Client.checkURL(inputURL)) {
+	if (checkURL(inputURL)) {
 		console.log("::: Submission Successful :::");
 
 		postData("http://localhost:8081/review", { url: inputURL })
 			.then((response) => {
 				updateUI(response);
 			})
-			.catch((error) => console.log("error", error));
+			.catch((error) => {
+				console.log("error", error);
+			});
 	} else {
 		alert("Invalid URL, please insert a valid URL.");
 	}
@@ -29,15 +31,14 @@ const postData = async (url = "", data = {}) => {
 	});
 	try {
 		const newData = await response.json();
-		console.log("newData:", newdata);
+		console.log("newData:", newData);
 		return newData;
-	} catch {
+	} catch (error) {
 		console.log("error", error);
 	}
 };
 
 const updateUI = (response) => {
-	document.getElementById("text").innerHTML = `Text: ${response.text}`;
 	document.getElementById(
 		"agreement"
 	).innerHTML = `Agreement: ${response.agreement}`;

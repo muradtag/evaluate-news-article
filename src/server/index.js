@@ -4,7 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const fetch = require("node-fetch");
 const cors = require("cors");
-var FormData = require("form-data");
+// var FormData = require("form-data");
 const mockAPIResponse = require("./mockAPI.js");
 
 const PORT = 8081;
@@ -28,40 +28,28 @@ app.get("/", function (req, res) {
 	// res.sendFile(path.resolve("src/client/views/index.html"));
 });
 
-app.post("/review", async function (req, res) {
+app.post("/review", async (req, res) => {
 	let userInput = req.body.url;
 	console.log(`URL: ${userInput}`);
+	const apiURL = `${baseURL}?key=${APIkey}&url=${userInput}&lang=en`;
+	console.log("Final API URL:", apiURL);
 
-	const formData = new FormData();
-	formData.append("key", APIkey);
-	formData.append("txt", userInput);
-	formData.append("lang", "en");
+	const response = await fetch(apiURL);
+	try {
+		const data = await response.json();
+		// console.log(data);
 
-	const requestOptions = {
-		method: "POST",
-		body: formData,
-		redirect: "follow",
-	};
+		projectData.score_tag = data.score_tag;
+		projectData.agreement = data.agreement;
+		projectData.subjectivity = data.subjectivity;
+		projectData.confidence = data.confidence;
+		projectData.irony = data.irony;
 
-	const response = fetch(baseURL, requestOptions)
-		.then((response) => ({
-			status: response.status,
-			body: response.json(),
-		}))
-		.then(({ status, body }) => {
-			console.log(status, body);
-
-			projectData.text = body.sentence_list[0].text;
-			projectData.score_tag = body.score_tag;
-			projectData.agreement = body.agreement;
-			projectData.subjectivity = body.subjectivity;
-			projectData.confidence = body.confidence;
-			projectData.irony = body.irony;
-
-			res.send(projectData);
-			console.log(projectData);
-		})
-		.catch((error) => console.log("error", error));
+		console.log(projectData);
+		res.send(projectData);
+	} catch (error) {
+		console.log("error:", error);
+	}
 });
 
 app.get("/test", function (req, res) {
@@ -74,4 +62,6 @@ app.listen(PORT, (error) => {
 });
 
 // export app to use it in the unit testing
-module.exports = app;
+module.exports = {
+	app,
+};

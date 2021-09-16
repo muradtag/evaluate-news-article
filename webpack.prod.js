@@ -1,5 +1,3 @@
-const path = require("path");
-const webpack = require("webpack");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const WorkboxPlugin = require("workbox-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -13,10 +11,13 @@ module.exports = {
 		libraryTarget: "var",
 		library: "Client",
 	},
+	optimization: {
+		minimizer: [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})],
+	},
 	module: {
 		rules: [
 			{
-				test: /\.js$/,
+				test: "/.js$/",
 				exclude: /node_modules/,
 				loader: "babel-loader",
 			},
@@ -34,7 +35,4 @@ module.exports = {
 		new MiniCssExtractPlugin({ filename: "[name].[contenthash].css" }),
 		new WorkboxPlugin.GenerateSW(),
 	],
-	optimization: {
-		minimizer: [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})],
-	},
 };
