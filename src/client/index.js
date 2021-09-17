@@ -5,7 +5,7 @@ import { handleSubmit } from "./js/formHandler";
 import "./styles/style.scss";
 
 window.addEventListener("DOMContentLoaded", () => {
-	console.log("DOM fully loaded and parsed");
+	console.log("DOM fully loaded");
 	const buttonSubmit = document.getElementById("btn-submit");
 	buttonSubmit.addEventListener("click", (e) => {
 		e.preventDefault();

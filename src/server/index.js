@@ -24,8 +24,8 @@ const APIkey = process.env.meaningCloudAPI;
 console.log(`Your API Key is ${APIkey}`);
 
 app.get("/", function (req, res) {
-	res.sendFile("dist/index.html");
-	// res.sendFile(path.resolve("src/client/views/index.html"));
+	// res.sendFile("dist/index.html");
+	res.sendFile(path.resolve("src/client/views/index.html"));
 });
 
 app.post("/review", async (req, res) => {
